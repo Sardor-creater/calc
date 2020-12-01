@@ -65,7 +65,6 @@ function Calc() {
     const percentCredit = Math.floor(payment * t * 12);  //Проценты + Кредит
     const income = Math.round((payment / 60) * 100);     //Необходимый доход
 
-
     const date2 = new Date();
     date2.setMonth(date2.getMonth() + 1);
     let dateAdd = date2;
@@ -145,7 +144,7 @@ function Calc() {
             debtV = (debtV * (1 + r / 1200) - principalDebt - interestRepayment);
         }
 
-        if (principalDebt + interestRepayment == 0) {
+        if (principalDebt + interestRepayment === 0) {
             break;
         }
         sumMonth++;
@@ -163,7 +162,21 @@ function Calc() {
     }
 
     let hh = (sumPayment) - Math.ceil(payment) * t * 12;
-    let srok = t * 12 - sumMonth
+
+    let srok = t * 12 - sumMonth;
+
+    function months2years(months) {
+        let dur1 = Math.floor(months / 12);
+        let dur2 = (months / 12) - dur1;
+        let dur3 = Math.floor(dur2 * 12);
+        if (dur1 < 1 && dur3 > 0) {
+            return dur3 + ' месяца';
+        }
+        if (dur3 === 0) {
+            return dur1 + " год"
+        }
+        return dur1 + " год " + dur3 + " месяца"
+    }
     //   table end
 
     return (
@@ -308,7 +321,7 @@ function Calc() {
 
                             <div className='right-blocks'>
                                 <div></div>
-                                <div style={{ color: '#39C523', margin: '0' }}> {hh < -3 ? hh + ' ₽' : null}</div>
+                                <div style={{ color: '#39C523', margin: '0' }}> {hh < -3 ? `${new Intl.NumberFormat('ru-RU').format((hh.toFixed()))} ₽` : null}</div>
                             </div>
 
                             <div className='right-blocks'>
@@ -319,19 +332,19 @@ function Calc() {
                             </div>
                             <div className='right-blocks'>
                                 <div></div>
-                                <div style={{ color: '#39C523', margin: '0' }}> {hh < -3 ? hh + ' ₽' : null}</div>
+                                <div style={{ color: '#39C523', margin: '0' }}> {hh < -3 ? `${new Intl.NumberFormat('ru-RU').format((hh.toFixed()))} ₽` : null}</div>
                             </div>
 
                             <div style={{ display: srok > 0 ? 'block' : 'none' }}>
                                 <div className='right-blocks'>
                                     <Text type="secondary">Срок</Text>
                                     <div>
-                                        {t * 12 - srok} месяцев
-                                </div>
+                                        {months2years(sumMonth)}
+                                    </div>
                                 </div>
                                 <div className='right-blocks'>
                                     <div></div>
-                                    <div style={{ color: '#39C523', margin: '0' }}>- {srok} месяцев</div>
+                                    <div style={{ color: '#39C523', margin: '0' }}>-{months2years(srok)}</div>
                                 </div>
                             </div>
 
